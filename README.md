@@ -129,7 +129,7 @@ Extra Guests × Extra Guest Fee × Number of Nights
 
 #### Final price
 
-```text
+```text 
 Base Amount + Extra Guest Amount
 ```
 
