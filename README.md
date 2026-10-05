@@ -516,16 +516,23 @@ Recommended screenshots:
 
 Example:
 
-```text
 screenshots/
 ├── home.png
-├── property-details.png
+├── homes-list.png
+├── property-details1.png
+├── property-details2.png
+├── property-details3.png
 ├── login.png
-├── signup.png
+├── signup1.png
+├── signup2.png
 ├── host-dashboard.png
-├── add-property.png
-├── booking.png
+├── add-property1.png
+├── add-property2.png
+├── add-property3.png
+├── booking1.png
+├── booking2.png
 ├── bookings.png
+├── bookings2.png
 └── favourites.png
 ```
 
