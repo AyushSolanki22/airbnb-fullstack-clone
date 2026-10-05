@@ -1,0 +1,67 @@
+<header class="bg-red-600 text-white shadow-md">
+  <nav class="container mx-auto flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+      <a
+        href="/"
+        class="rounded-lg px-3 py-2 text-lg font-bold text-white transition hover:bg-red-500 <%= currPage==='index' ? 'bg-red-500' : '' %>"
+      >
+        AirBnB
+      </a>
+
+      <% if (isLoggedIn) { %>
+        <% if(user && user.userType === 'guest') { %>
+        <a
+          href="/homes"
+          class="rounded-lg px-3 py-2 font-medium text-white transition hover:bg-red-500 <%= currPage==='Home' ? 'bg-red-500' : '' %>"
+        >
+          Homes-List
+        </a>
+
+        <a
+          href="/bookings"
+          class="rounded-lg px-3 py-2 font-medium text-white transition hover:bg-red-500 <%= currPage==='bookings' ? 'bg-red-500' : '' %>"
+        >
+          Bookings
+        </a>
+
+        <a
+          href="/favourites"
+          class="rounded-lg px-3 py-2 font-medium text-white transition hover:bg-red-500 <%= currPage==='favourites' ? 'bg-red-500' : '' %>"
+        >
+          Favourites
+        </a>
+      <% } %>
+      <% if(user && user.userType === 'host') { %>
+        <a
+          href="/host/host-homes"
+          class="rounded-lg px-3 py-2 font-medium text-white transition hover:bg-red-500 <%= currPage==='host-homes' ? 'bg-red-500' : '' %>"
+        >
+          Your Homes
+        </a>
+        <a
+          href="/host/add-home"
+          class="rounded-lg px-3 py-2 font-medium text-white transition hover:bg-red-500 <%= currPage==='addHome' ? 'bg-red-500' : '' %>"
+        >
+          Add Home
+        </a>
+        <% } %>
+      <% } %>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <% if (isLoggedIn) { %>
+        <form action="/logout" method="POST">
+          <button type="submit" class="rounded-lg border border-red-300 px-4 py-2 font-semibold text-white transition hover:bg-red-500">
+            Logout
+          </button>
+        </form>
+      <% } else { %>
+        <a href="/signup" class="rounded-lg border border-red-300 px-4 py-2 font-semibold text-white transition hover:bg-red-500">
+          Signup
+        </a>
+        <a href="/login" class="rounded-lg bg-white px-4 py-2 font-semibold text-red-600 transition hover:bg-red-100">
+          Login
+        </a>
+      <% } %>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,44 @@
+const express = require("express");
+
+const bookingRouter = express.Router();
+
+const bookingController =
+  require("../controllers/bookingController");
+
+const requireLogin =
+  require("../middleware/auth");
+
+
+// Booking page
+bookingRouter.get(
+  "/book/:homeId",
+  requireLogin,
+  bookingController.getBooking
+);
+
+
+// Create booking
+bookingRouter.post(
+  "/book/:homeId",
+  requireLogin,
+  bookingController.postBooking
+);
+
+
+// User bookings
+bookingRouter.get(
+  "/bookings",
+  requireLogin,
+  bookingController.getBookings
+);
+
+
+// Cancel booking
+bookingRouter.post(
+  "/cancel-booking/:bookingId",
+  requireLogin,
+  bookingController.postCancelBooking
+);
+
+
+module.exports = bookingRouter;

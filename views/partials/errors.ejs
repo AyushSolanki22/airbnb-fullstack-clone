@@ -1,0 +1,7 @@
+<% if(typeof errorMessages !== 'undefined' && errorMessages && errorMessages.length>0) { %>
+              <div class="col-span-2 rounded-lg border border-red-500 bg-red-100 p-4 text-sm text-red-700">
+                <% errorMessages.forEach(error=> { %>
+                  <li><%= error %></li> 
+                <% }) %>
+              </div>
+            <% } %> 

@@ -1,0 +1,991 @@
+<%- include('../partials/head') %>
+</head>
+
+<body class="bg-slate-50">
+
+  <%- include('../partials/header') %>
+
+  <main class="booking-page min-h-screen py-10">
+
+    <div class="max-w-7xl mx-auto px-5 lg:px-8">
+
+      <!-- Back to property -->
+      <div class="mb-8">
+        <a
+          href="/homes/<%= home._id %>"
+          class="inline-flex items-center gap-2 text-slate-600 hover:text-red-500 font-medium transition"
+        >
+          ← Back to property
+        </a>
+      </div>
+
+
+      <!-- MAIN BOOKING CARD -->
+      <div class="booking-card bg-white rounded-3xl shadow-xl border border-slate-200 p-6 lg:p-7">
+
+        <!-- IMPORTANT:
+             LEFT = PROPERTY
+             RIGHT = BOOKING
+        -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-10">
+
+
+          <!-- ===================================================== -->
+          <!-- LEFT SIDE : PROPERTY -->
+          <!-- ===================================================== -->
+
+          <div class="space-y-6">
+
+            <!-- Property Image -->
+            <div class="booking-image overflow-hidden rounded-2xl bg-slate-100 shadow-sm">
+
+              <img
+                src="/uploads/<%= home.photo %>"
+                alt="<%= home.name %>"
+                class="w-full h-[420px] object-cover"
+              >
+
+            </div>
+
+
+            <!-- Property Information -->
+            <div class="px-1">
+
+              <h2 class="text-3xl font-bold text-slate-900">
+                <%= home.name %>
+              </h2>
+
+              <div class="flex items-center gap-2 mt-2 text-slate-600">
+                <span class="text-red-500">📍</span>
+                <span><%= home.location %></span>
+              </div>
+
+              <div class="flex items-center gap-2 mt-3">
+
+                <span class="text-yellow-500 text-xl">
+                  ★
+                </span>
+
+                <span class="font-semibold text-slate-800">
+                  <%= home.rating %> / 5
+                </span>
+
+              </div>
+
+              <% if (home.description) { %>
+
+                <div class="mt-5 border-t border-slate-200 pt-5">
+
+                  <h3 class="font-bold text-lg text-slate-900 mb-2">
+                    About this property
+                  </h3>
+
+                  <p class="text-slate-600 leading-relaxed">
+                    <%= home.description %>
+                  </p>
+
+                </div>
+
+              <% } %>
+
+              <!-- Price information -->
+              <div class="mt-6 bg-red-50 border border-red-100 rounded-2xl p-5">
+
+                <div class="flex items-center justify-between">
+
+                  <div>
+                    <p class="text-sm text-slate-500">
+                      Starting price
+                    </p>
+
+                    <p class="text-2xl font-bold text-slate-900">
+                      ₹<%= home.price %>
+                    </p>
+                  </div>
+
+                  <div class="text-sm text-slate-500">
+                    per night
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- ===================================================== -->
+          <!-- RIGHT SIDE : BOOKING -->
+          <!-- ===================================================== -->
+
+          <div class="space-y-6">
+
+            <!-- Heading -->
+
+            <div>
+
+              <p class="text-red-500 font-semibold text-sm mb-1">
+                Reserve your stay
+              </p>
+
+              <h1 class="text-3xl lg:text-4xl font-bold text-slate-900">
+                Book this home
+              </h1>
+
+              <p class="text-slate-500 mt-2">
+                Choose your dates and number of guests.
+              </p>
+
+            </div>
+
+
+            <!-- Booking Form -->
+
+            <form
+              action="/book/<%= home._id %>"
+              method="POST"
+              id="bookingForm"
+              class="space-y-6"
+            >
+
+
+              <!-- CHECK-IN -->
+
+              <div>
+
+                <label
+                  for="checkIn"
+                  class="block font-semibold text-slate-800 mb-2"
+                >
+                  Check-in
+                </label>
+
+                <input
+                  type="date"
+                  id="checkIn"
+                  name="checkIn"
+                  required
+                  class="booking-input w-full"
+                >
+
+              </div>
+
+
+              <!-- CHECK-OUT -->
+
+              <div>
+
+                <label
+                  for="checkOut"
+                  class="block font-semibold text-slate-800 mb-2"
+                >
+                  Check-out
+                </label>
+
+                <input
+                  type="date"
+                  id="checkOut"
+                  name="checkOut"
+                  required
+                  class="booking-input w-full"
+                >
+
+              </div>
+
+
+              <!-- GUESTS -->
+
+              <div>
+
+                <label
+                  for="guests"
+                  class="block font-semibold text-slate-800 mb-2"
+                >
+                  Number of guests
+                </label>
+
+                <input
+                  type="number"
+                  id="guests"
+                  name="guests"
+                  min="1"
+                  max="4"
+                  value="1"
+                  required
+                  class="booking-input w-full"
+                >
+
+                <p class="text-sm text-slate-500 mt-2">
+                  Maximum 4 guests
+                </p>
+
+              </div>
+
+
+              <!-- ================================================= -->
+              <!-- PRICE SUMMARY -->
+              <!-- ================================================= -->
+
+              <div class="price-summary bg-slate-50 border border-slate-200 rounded-2xl p-5">
+
+                <!-- Price per night -->
+
+                <div class="price-row flex items-center justify-between gap-4 mb-3">
+
+                  <span class="text-slate-600">
+                    Price per night
+                  </span>
+
+                  <span
+                    id="pricePerNight"
+                    class="font-semibold text-slate-900 whitespace-nowrap"
+                  >
+                    ₹<%= home.price %>
+                  </span>
+
+                </div>
+
+
+                <!-- Nights -->
+
+                <div class="price-row flex items-center justify-between gap-4 mb-3">
+
+                  <span class="text-slate-600">
+                    Nights
+                  </span>
+
+                  <span
+                    id="numberOfNights"
+                    class="font-semibold text-slate-900 whitespace-nowrap"
+                  >
+                    0
+                  </span>
+
+                </div>
+
+
+                <!-- Stay Price -->
+
+                <div class="price-row flex items-center justify-between gap-4 mb-3">
+
+                  <span class="text-slate-600">
+                    Stay price
+                  </span>
+
+                  <span
+                    id="stayPrice"
+                    class="font-semibold text-slate-900 whitespace-nowrap"
+                  >
+                    ₹0
+                  </span>
+
+                </div>
+
+
+                <!-- Extra Guest Charges -->
+
+                <div class="price-row flex items-center justify-between gap-4 mb-3">
+
+                  <span class="text-slate-600 whitespace-nowrap">
+                    Extra guest charges
+                  </span>
+
+                  <span
+                    id="extraGuestCharges"
+                    class="font-semibold text-slate-900 whitespace-nowrap"
+                  >
+                    ₹0
+                  </span>
+
+                </div>
+
+
+                <!-- Extra Guest Rate -->
+
+                <div class="price-row flex items-center justify-between gap-4 mb-3">
+
+                  <span class="text-slate-600 whitespace-nowrap">
+                    Extra guest fee / night
+                  </span>
+
+                  <span
+                    id="extraGuestRate"
+                    class="font-semibold text-slate-900 whitespace-nowrap"
+                  >
+                    ₹<%= home.extraGuestFee || 0 %>
+                  </span>
+
+                </div>
+
+
+                <!-- TOTAL -->
+
+                <div class="total-row flex items-center justify-between gap-4 border-t border-slate-200 pt-4 mt-4">
+
+                  <span class="text-lg font-bold text-slate-900">
+                    Total
+                  </span>
+
+                  <span
+                    id="totalPrice"
+                    class="text-2xl font-extrabold text-red-500 whitespace-nowrap"
+                  >
+                    ₹0
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- Error message -->
+
+              <p
+                id="dateError"
+                class="hidden text-sm font-medium text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3"
+              ></p>
+
+
+              <!-- CONFIRM BUTTON -->
+
+              <button
+                type="submit"
+                id="confirmBookingBtn"
+                class="confirm-btn w-full"
+              >
+                Confirm Booking
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+
+  <!-- ============================================================= -->
+  <!-- STYLING -->
+  <!-- ============================================================= -->
+
+  <style>
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #fff7f2 52%, #fef2f2 100%);
+    }
+
+
+    .booking-page {
+      color: #0f172a;
+      min-height: 100vh;
+      padding: 36px 0 56px;
+    }
+
+
+    .booking-page > .max-w-7xl {
+      width: calc(100% - 48px);
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+
+    .booking-page > .max-w-7xl > div:first-child {
+      margin-bottom: 24px;
+    }
+
+
+    .booking-card,
+    .booking-card * {
+      box-sizing: border-box;
+    }
+
+
+    .booking-card {
+      background: #ffffff;
+      padding: clamp(18px, 2.4vw, 36px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 24px;
+      box-shadow:
+        0 24px 60px rgba(15, 23, 42, 0.08),
+        0 4px 14px rgba(15, 23, 42, 0.04);
+      overflow: hidden;
+    }
+
+
+    .booking-card > .grid > div {
+      min-width: 0;
+      display: grid;
+      align-content: start;
+      gap: 24px;
+    }
+
+
+    .booking-card > .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(24px, 3vw, 44px);
+      align-items: start;
+    }
+
+
+    .booking-card > .grid > div > .space-y-6 {
+      display: grid;
+      gap: 20px;
+    }
+
+
+    .booking-card > .grid > div:last-child > form {
+      display: grid;
+      gap: 20px;
+    }
+
+
+    .booking-card > .grid > div:last-child > form > div {
+      margin: 0;
+    }
+
+
+    .booking-image {
+      background: #f1f5f9;
+      border-radius: 20px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+      overflow: hidden;
+    }
+
+
+    .booking-image img {
+      display: block;
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.45s ease;
+    }
+
+
+    .booking-image:hover img {
+      transform: scale(1.025);
+    }
+
+
+    .booking-card h1,
+    .booking-card h2,
+    .booking-card h3 {
+      letter-spacing: -0.025em;
+    }
+
+
+    .booking-card > .grid > div:first-child > div:last-child {
+      padding: 1.25rem;
+      border: 1px solid #f1f5f9;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #fffdfc 100%);
+    }
+
+
+    .booking-card > .grid > div:last-child > div:first-child {
+      padding: 0.25rem 0 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+
+    .booking-card > .grid > div:last-child > form > div > label {
+      display: block;
+      letter-spacing: 0.01em;
+    }
+
+
+    .booking-input {
+      width: 100%;
+      padding: 14px 16px;
+
+      border: 1px solid #dce3ec;
+      border-radius: 14px;
+
+      background: #ffffff;
+      color: #0f172a;
+
+      outline: none;
+
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+    }
+
+
+    .booking-input:hover {
+      border-color: #cbd5e1;
+    }
+
+
+    .booking-input:focus {
+      border-color: #ef4444;
+
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.11);
+
+      background: #ffffff;
+    }
+
+
+    .price-summary {
+      background: linear-gradient(145deg, #ffffff 0%, #fffafa 100%);
+      border: 1px solid #e8edf3;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.045);
+    }
+
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 24px;
+      gap: 1rem;
+      padding-bottom: 0.15rem;
+    }
+
+
+    .price-row > span:first-child {
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+
+    .price-row > span:last-child {
+      flex: 0 0 auto;
+      text-align: right;
+    }
+
+
+    .price-row span:last-child {
+      white-space: nowrap;
+    }
+
+
+    .extra-charge {
+      white-space: nowrap;
+    }
+
+
+    .total-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 42px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+
+    .confirm-btn {
+      width: 100%;
+
+      padding: 14px 20px;
+
+      border: none;
+      border-radius: 14px;
+
+      background: linear-gradient(
+        135deg,
+        #fb5b57,
+        #e83f46
+      );
+
+      color: #ffffff;
+
+      font-size: 17px;
+      font-weight: 700;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 8px 20px rgba(220, 38, 38, 0.20);
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+    }
+
+
+    .confirm-btn:hover {
+      background: linear-gradient(
+        135deg,
+        #dc2626,
+        #b91c1c
+      );
+
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 12px 25px rgba(220, 38, 38, 0.28);
+    }
+
+
+    .confirm-btn:active {
+      transform: translateY(0);
+    }
+
+
+    .confirm-btn:focus-visible {
+      outline: 3px solid rgba(239, 68, 68, 0.28);
+      outline-offset: 3px;
+    }
+
+
+    @media (min-width: 1024px) {
+      .booking-card > .grid {
+        grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      }
+    }
+
+
+    @media (max-width: 1023px) {
+      .booking-image img {
+        height: clamp(280px, 52vw, 350px);
+      }
+    }
+
+
+    @media (max-width: 480px) {
+      .booking-page > .max-w-7xl {
+        width: calc(100% - 24px);
+      }
+
+      .price-summary {
+        padding: 1rem;
+      }
+
+      .price-row {
+        gap: 0.75rem;
+      }
+
+      .price-row > span:first-child {
+        font-size: 0.8rem;
+      }
+
+      .price-row {
+        gap: 0.55rem;
+      }
+
+      .booking-card > .grid > div:first-child > div:last-child {
+        padding: 1rem;
+      }
+    }
+
+  </style>
+
+
+
+  <!-- ============================================================= -->
+  <!-- LIVE PRICE CALCULATION -->
+  <!-- ============================================================= -->
+
+  <script>
+
+    const checkInInput =
+      document.getElementById("checkIn");
+
+    const checkOutInput =
+      document.getElementById("checkOut");
+
+    const guestsInput =
+      document.getElementById("guests");
+
+    const numberOfNightsElement =
+      document.getElementById("numberOfNights");
+
+    const stayPriceElement =
+      document.getElementById("stayPrice");
+
+    const extraGuestChargesElement =
+      document.getElementById("extraGuestCharges");
+
+    const totalPriceElement =
+      document.getElementById("totalPrice");
+
+    const dateErrorElement =
+      document.getElementById("dateError");
+
+
+    /* Values coming from your Home */
+
+    const pricePerNight =
+      Number("<%= home.price %>");
+
+    const maxGuests =
+      4;
+
+    const extraGuestFee =
+      Number("<%= home.extraGuestFee || 0 %>");
+
+
+    /* --------------------------------------------------------- */
+    /* Set minimum check-in date to today */
+    /* --------------------------------------------------------- */
+
+    const today =
+      new Date();
+
+    const todayString =
+      today.toISOString().split("T")[0]
+      
+    checkInInput.min = todayString;
+
+    checkOutInput.min = todayString;
+
+
+    /* --------------------------------------------------------- */
+    /* Calculate booking price */
+    /* --------------------------------------------------------- */
+
+    function calculatePrice() {
+
+      dateErrorElement.classList.add("hidden");
+      dateErrorElement.textContent = "";
+
+
+      const checkInValue =
+        checkInInput.value;
+
+      const checkOutValue =
+        checkOutInput.value;
+
+      let guests =
+        Number(guestsInput.value);
+
+
+      /* ------------------------------------------------------- */
+      /* Guest validation */
+      /* ------------------------------------------------------- */
+
+      if (!guests || guests < 1) {
+        guests = 1;
+        guestsInput.value = 1;
+      }
+
+
+      if (guests > maxGuests) {
+
+        guests = maxGuests;
+
+        guestsInput.value =
+          maxGuests;
+
+      }
+
+
+      /* ------------------------------------------------------- */
+      /* No dates selected */
+      /* ------------------------------------------------------- */
+
+      if (!checkInValue || !checkOutValue) {
+
+        numberOfNightsElement.textContent = "0";
+
+        stayPriceElement.textContent = "₹0";
+
+        extraGuestChargesElement.textContent = "₹0";
+
+        totalPriceElement.textContent = "₹0";
+
+        return;
+
+      }
+
+
+      /* ------------------------------------------------------- */
+      /* Convert dates */
+      /* ------------------------------------------------------- */
+
+      const checkIn =
+        new Date(checkInValue + "T00:00:00");
+
+      const checkOut =
+        new Date(checkOutValue + "T00:00:00");
+
+
+      /* ------------------------------------------------------- */
+      /* Invalid date range */
+      /* ------------------------------------------------------- */
+
+      if (checkOut <= checkIn) {
+
+        numberOfNightsElement.textContent = "0";
+
+        stayPriceElement.textContent = "₹0";
+
+        extraGuestChargesElement.textContent = "₹0";
+
+        totalPriceElement.textContent = "₹0";
+
+
+        dateErrorElement.textContent =
+          "Check-out must be after check-in.";
+
+        dateErrorElement.classList.remove("hidden");
+
+        return;
+
+      }
+
+
+      /* ------------------------------------------------------- */
+      /* Calculate nights */
+      /* ------------------------------------------------------- */
+
+      const difference =
+        checkOut.getTime() -
+        checkIn.getTime();
+
+      const millisecondsPerDay =
+        1000 * 60 * 60 * 24;
+
+      const nights =
+        Math.round(
+          difference / millisecondsPerDay
+        );
+
+
+      /* ------------------------------------------------------- */
+      /* Stay price */
+      /* ------------------------------------------------------- */
+
+      const stayPrice =
+        nights * pricePerNight;
+
+
+      /* ------------------------------------------------------- */
+      /* Extra guest calculation */
+      /*
+         Example:
+
+         Maximum guests = 4
+         Guests selected = 3
+
+         If your property has 1 included guest:
+
+         extraGuests = 3 - 1
+         extra charge = extraGuests × fee × nights
+      */
+
+      const includedGuests = 1;
+
+      const extraGuests =
+        Math.max(
+          0,
+          guests - includedGuests
+        );
+
+
+      const extraGuestCharges =
+        extraGuests *
+        extraGuestFee *
+        nights;
+
+
+      /* ------------------------------------------------------- */
+      /* Final total */
+      /* ------------------------------------------------------- */
+
+      const total =
+        stayPrice +
+        extraGuestCharges;
+
+
+      /* ------------------------------------------------------- */
+      /* Update UI */
+      /* ------------------------------------------------------- */
+
+      numberOfNightsElement.textContent =
+        nights;
+
+      stayPriceElement.textContent =
+        "₹" + stayPrice.toLocaleString("en-IN");
+
+      extraGuestChargesElement.textContent =
+        "₹" + extraGuestCharges.toLocaleString("en-IN");
+
+      totalPriceElement.textContent =
+        "₹" + total.toLocaleString("en-IN");
+
+    }
+
+
+    /* --------------------------------------------------------- */
+    /* LIVE UPDATES */
+    /* --------------------------------------------------------- */
+
+    checkInInput.addEventListener(
+      "input",
+      calculatePrice
+    );
+
+
+    checkInInput.addEventListener(
+      "change",
+      function () {
+
+        /* Check-out cannot be before check-in */
+
+        if (checkInInput.value) {
+
+          checkOutInput.min =
+            checkInInput.value;
+
+        }
+
+        calculatePrice();
+
+      }
+    );
+
+
+    checkOutInput.addEventListener(
+      "input",
+      calculatePrice
+    );
+
+
+    checkOutInput.addEventListener(
+      "change",
+      calculatePrice
+    );
+
+
+    guestsInput.addEventListener(
+      "input",
+      calculatePrice
+    );
+
+
+    guestsInput.addEventListener(
+      "change",
+      calculatePrice
+    );
+
+
+    /* --------------------------------------------------------- */
+    /* Initial calculation */
+    /* --------------------------------------------------------- */
+
+    calculatePrice();
+
+
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,1379 @@
+<%- include('../partials/head') %>
+
+<style>
+
+    /* =========================
+       PAGE
+    ========================= */
+
+    .details-page {
+        min-height: 100vh;
+        background:
+            radial-gradient(circle at top left, #fff1f2 0%, transparent 35%),
+            radial-gradient(circle at bottom right, #f3e8ff 0%, transparent 35%),
+            #f8fafc;
+        padding: 45px 20px 70px;
+        color: #1f2937;
+    }
+
+    .details-container {
+        max-width: 1180px;
+        margin: 0 auto;
+    }
+
+
+    /* =========================
+       BACK BUTTON
+    ========================= */
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 22px;
+        transition: 0.2s ease;
+    }
+
+    .back-link:hover {
+        color: #e11d48;
+        transform: translateX(-3px);
+    }
+
+
+    /* =========================
+       MAIN PROPERTY CARD
+    ========================= */
+
+    .property-card {
+        display: grid;
+        grid-template-columns: 48% 52%;
+        background: white;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow:
+            0 25px 60px rgba(15, 23, 42, 0.13),
+            0 5px 20px rgba(15, 23, 42, 0.06);
+        border: 1px solid #e5e7eb;
+    }
+
+
+    /* =========================
+       IMAGE
+    ========================= */
+
+    .property-image-wrapper {
+        position: relative;
+        min-height: 620px;
+        overflow: hidden;
+        background: #171717;
+    }
+
+    .property-image {
+        width: 100%;
+        height: 100%;
+        min-height: 620px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.6s ease;
+    }
+
+    .property-image-wrapper:hover .property-image {
+        transform: scale(1.035);
+    }
+
+    .image-overlay {
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.05) 0%,
+                rgba(0,0,0,0.02) 45%,
+                rgba(0,0,0,0.68) 100%
+            );
+        pointer-events: none;
+    }
+
+
+    /* =========================
+       IMAGE RATING
+    ========================= */
+
+    .image-rating {
+        position: absolute;
+        top: 22px;
+        left: 22px;
+
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 9px 15px;
+
+        background: rgba(255,255,255,0.96);
+        border-radius: 30px;
+
+        font-size: 14px;
+        font-weight: 800;
+
+        color: #111827;
+
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .image-rating-star {
+        width: 28px;
+        height: 28px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #fef3c7;
+        color: #f59e0b;
+
+        border-radius: 50%;
+
+        font-size: 15px;
+    }
+
+
+    /* =========================
+       IMAGE BOTTOM INFO
+    ========================= */
+
+    .image-bottom {
+        position: absolute;
+        left: 28px;
+        right: 28px;
+        bottom: 28px;
+        color: white;
+    }
+
+    .image-bottom-label {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        color: rgba(255,255,255,0.75);
+        margin-bottom: 7px;
+    }
+
+    .image-bottom-title {
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin: 0;
+        text-shadow: 0 3px 15px rgba(0,0,0,0.35);
+    }
+
+    .image-bottom-location {
+        margin-top: 8px;
+        font-size: 14px;
+        color: rgba(255,255,255,0.82);
+    }
+
+
+    /* =========================
+       RIGHT SIDE
+    ========================= */
+
+    .property-details {
+        padding: 38px;
+        background:
+            linear-gradient(
+                145deg,
+                #ffffff 0%,
+                #fffafa 55%,
+                #faf5ff 100%
+            );
+
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    .details-inner {
+        border: 1px solid #f1d9df;
+        background: rgba(255,255,255,0.92);
+
+        border-radius: 22px;
+
+        padding: 28px;
+
+        box-shadow:
+            0 10px 35px rgba(244, 63, 94, 0.08);
+    }
+
+
+    /* =========================
+       TITLE
+    ========================= */
+
+    .small-label {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        color: #e11d48;
+        margin-bottom: 8px;
+    }
+
+    .property-name {
+    margin: 0;
+    font-size: 38px;
+    line-height: 1.1;
+    font-weight: 850;
+    color: #be123c;
+    letter-spacing: -1px;
+}
+
+    .property-location {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        margin-top: 11px;
+
+        color: #64748b;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .location-icon {
+        width: 28px;
+        height: 28px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background: #fff1f2;
+        color: #e11d48;
+
+        font-size: 12px;
+    }
+
+
+    /* =========================
+       RATING
+    ========================= */
+
+    .rating-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+
+        margin-top: 20px;
+
+        padding: 10px 14px;
+
+        border-radius: 13px;
+
+        background: linear-gradient(
+            135deg,
+            #fffbeb,
+            #fef3c7
+        );
+
+        border: 1px solid #fde68a;
+
+        box-shadow: 0 5px 15px rgba(245,158,11,0.08);
+    }
+
+    .rating-star {
+        font-size: 19px;
+        color: #f59e0b;
+    }
+
+    .rating-number {
+        font-size: 15px;
+        font-weight: 800;
+        color: #111827;
+    }
+
+    .rating-label {
+        display: block;
+        font-size: 10px;
+        color: #78716c;
+        margin-top: 1px;
+    }
+
+
+    /* =========================
+       DIVIDER
+    ========================= */
+
+    .details-divider {
+        height: 1px;
+        background: linear-gradient(
+            to right,
+            transparent,
+            #e5e7eb,
+            transparent
+        );
+
+        margin: 24px 0;
+    }
+
+
+    /* =========================
+       PRICE
+    ========================= */
+
+    .price-box {
+        padding: 20px;
+
+        border-radius: 19px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #fff1f2,
+                #fff7ed
+            );
+
+        border: 1px solid #fecdd3;
+
+        box-shadow:
+            0 8px 25px rgba(244,63,94,0.08);
+    }
+
+    .price-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .price-label {
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #e11d48;
+    }
+
+    .price {
+        margin-top: 4px;
+        font-size: 34px;
+        font-weight: 900;
+        color: #111827;
+        letter-spacing: -1px;
+    }
+
+    .price-night {
+        font-size: 14px;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    .available-badge {
+        padding: 8px 12px;
+        border-radius: 30px;
+
+        background: #ecfdf5;
+        color: #059669;
+
+        border: 1px solid #a7f3d0;
+
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+
+    /* =========================
+       DESCRIPTION
+    ========================= */
+
+    .about-section {
+        margin-top: 25px;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        font-size: 18px;
+        font-weight: 800;
+        color: #111827;
+    }
+
+    .heading-icon {
+        width: 35px;
+        height: 35px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #ffe4e6;
+        color: #e11d48;
+
+        border-radius: 11px;
+    }
+
+    .description {
+        margin-top: 12px;
+
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+
+    /* =========================
+       INFO CARDS
+    ========================= */
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .info-card {
+        padding: 14px;
+        border-radius: 15px;
+        border: 1px solid;
+        transition: 0.2s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(15,23,42,0.07);
+    }
+
+    .info-card.location {
+        background: #fff1f2;
+        border-color: #fecdd3;
+    }
+
+    .info-card.rating {
+        background: #fffbeb;
+        border-color: #fde68a;
+    }
+
+    .info-card.stay {
+        background: #f5f3ff;
+        border-color: #ddd6fe;
+    }
+
+    .info-label {
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .location .info-label {
+        color: #e11d48;
+    }
+
+    .rating .info-label {
+        color: #d97706;
+    }
+
+    .stay .info-label {
+        color: #7c3aed;
+    }
+
+    .info-value {
+        margin-top: 6px;
+        font-size: 13px;
+        font-weight: 800;
+        color: #1f2937;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    /* =========================
+       ACTION BUTTONS
+    ========================= */
+
+    .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+
+        margin-top: 25px;
+    }
+
+    .favourite-button {
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        padding: 14px 18px;
+
+        border-radius: 13px;
+
+        border: 2px solid #e5e7eb;
+
+        background: white;
+
+        color: #374151;
+
+        font-size: 14px;
+        font-weight: 800;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+    .favourite-button:hover {
+        border-color: #fda4af;
+        background: #fff1f2;
+        color: #e11d48;
+
+        transform: translateY(-2px);
+
+        box-shadow: 0 8px 20px rgba(244,63,94,0.12);
+    }
+
+    .heart {
+        font-size: 21px;
+        line-height: 1;
+    }
+
+
+    .book-button {
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+
+        padding: 14px 18px;
+
+        border-radius: 13px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #f43f5e,
+                #e11d48,
+                #be123c
+            );
+
+        color: white;
+
+        text-decoration: none;
+
+        font-size: 14px;
+        font-weight: 850;
+
+        box-shadow:
+            0 10px 25px rgba(225,29,72,0.28);
+
+        transition: all 0.2s ease;
+    }
+
+    .book-button:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 14px 30px rgba(225,29,72,0.38);
+
+        background:
+            linear-gradient(
+                135deg,
+                #e11d48,
+                #be123c
+            );
+    }
+
+    .book-arrow {
+        font-size: 18px;
+        transition: 0.2s ease;
+    }
+
+    .book-button:hover .book-arrow {
+        transform: translateX(4px);
+    }
+
+    .booking-note {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 11px;
+        margin-top: 10px;
+    }
+
+
+    /* =========================
+       HOUSE RULES
+    ========================= */
+
+    .rules-section {
+        margin-top: 35px;
+
+        background: white;
+
+        border-radius: 28px;
+
+        overflow: hidden;
+
+        border: 1px solid #e5e7eb;
+
+        box-shadow:
+            0 20px 55px rgba(15,23,42,0.10);
+    }
+
+    .rules-header {
+        padding: 25px 30px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 20px;
+
+        background:
+            linear-gradient(
+                110deg,
+                #fff1f2,
+                #ffffff,
+                #f5f3ff
+            );
+
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .rules-title-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .rules-icon {
+        width: 46px;
+        height: 46px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #ffe4e6;
+        color: #e11d48;
+
+        border-radius: 14px;
+
+        font-size: 21px;
+    }
+
+    .rules-title {
+        margin: 0;
+
+        font-size: 24px;
+        font-weight: 850;
+
+        color: #111827;
+    }
+
+    .rules-subtitle {
+        margin-top: 4px;
+
+        color: #64748b;
+        font-size: 13px;
+    }
+
+
+    /* DOWNLOAD */
+
+    .download-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+
+        padding: 12px 18px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #111827,
+                #334155
+            );
+
+        color: white;
+
+        text-decoration: none;
+
+        border-radius: 12px;
+
+        font-size: 13px;
+        font-weight: 800;
+
+        box-shadow: 0 8px 18px rgba(15,23,42,0.18);
+
+        transition: 0.2s ease;
+
+        white-space: nowrap;
+    }
+
+    .download-button:hover {
+        background:
+            linear-gradient(
+                135deg,
+                #e11d48,
+                #be123c
+            );
+
+        transform: translateY(-2px);
+
+        box-shadow: 0 10px 22px rgba(225,29,72,0.25);
+    }
+
+
+    /* PDF */
+
+    .pdf-container {
+        padding: 25px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #f8fafc,
+                #fff1f2
+            );
+    }
+
+    .pdf-frame {
+        width: 100%;
+        height: 620px;
+
+        display: block;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 18px;
+
+        background: white;
+
+        box-shadow:
+            0 12px 30px rgba(15,23,42,0.12);
+    }
+
+
+    /* =========================
+       NO RULES
+    ========================= */
+
+    .no-rules {
+        margin-top: 35px;
+
+        padding: 30px;
+
+        background: white;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 25px;
+
+        box-shadow: 0 15px 40px rgba(15,23,42,0.08);
+    }
+
+    .no-rules-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .no-rules-icon {
+        width: 45px;
+        height: 45px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #f1f5f9;
+        border-radius: 13px;
+
+        font-size: 20px;
+    }
+
+    .no-rules-title {
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .no-rules-text {
+        color: #64748b;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 900px) {
+
+        .property-card {
+            grid-template-columns: 1fr;
+        }
+
+        .property-image-wrapper,
+        .property-image {
+            min-height: 430px;
+        }
+
+        .property-details {
+            padding: 25px;
+        }
+
+    }
+
+
+    @media (max-width: 640px) {
+
+        .details-page {
+            padding: 25px 12px 50px;
+        }
+
+        .property-card {
+            border-radius: 20px;
+        }
+
+        .property-image-wrapper,
+        .property-image {
+            min-height: 350px;
+        }
+
+        .property-details {
+            padding: 14px;
+        }
+
+        .details-inner {
+            padding: 20px;
+        }
+
+        .property-name {
+            font-size: 30px;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .actions {
+            grid-template-columns: 1fr;
+        }
+
+        .rules-header {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 22px;
+        }
+
+        .download-button {
+            width: 100%;
+        }
+
+        .pdf-container {
+            padding: 12px;
+        }
+
+        .pdf-frame {
+            height: 500px;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+    <%- include('../partials/header') %>
+
+
+    <main class="details-page">
+
+        <div class="details-container">
+
+
+            <!-- =========================
+                 BACK
+            ========================== -->
+
+            <a href="/homes" class="back-link">
+
+                <span>←</span>
+
+                Back to Homes
+
+            </a>
+
+
+
+            <!-- =========================
+                 PROPERTY CARD
+            ========================== -->
+
+            <section class="property-card">
+
+
+                <!-- =========================
+                     IMAGE
+                ========================== -->
+
+                <div class="property-image-wrapper">
+
+
+                    <img
+                        src="/uploads/<%= home.photo %>"
+                        alt="<%= home.name %>"
+                        class="property-image"
+                    >
+
+
+                    <div class="image-overlay"></div>
+
+
+                    <!-- Rating -->
+
+                    <div class="image-rating">
+
+                        <span class="image-rating-star">
+                            ★
+                        </span>
+
+                        <span>
+                            <%= home.rating %> / 5
+                        </span>
+
+                    </div>
+
+
+                    <!-- Image bottom -->
+
+                    <div class="image-bottom">
+
+                        <div class="image-bottom-label">
+                            Your next stay
+                        </div>
+
+                        <h2 class="image-bottom-title">
+                            <%= home.name %>
+                        </h2>
+
+                        <div class="image-bottom-location">
+                            📍 <%= home.location %>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     DETAILS
+                ========================== -->
+
+                <div class="property-details">
+
+
+                    <div class="details-inner">
+
+
+                        <div class="small-label">
+                            A place to feel at home
+                        </div>
+
+
+                        <!-- Name -->
+
+                        <h1 class="property-name">
+                            <%= home.name %>
+                        </h1>
+
+
+                        <!-- Location -->
+
+                        <div class="property-location">
+
+                            <span class="location-icon">
+                                ●
+                            </span>
+
+                            <%= home.location %>
+
+                        </div>
+
+
+
+                        <!-- Rating -->
+
+                        <div class="rating-box">
+
+                            <span class="rating-star">
+                                ★
+                            </span>
+
+                            <div>
+
+                                <div class="rating-number">
+                                    <%= home.rating %> / 5
+                                </div>
+
+                                <span class="rating-label">
+                                    Property rating
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="details-divider"></div>
+
+
+
+                        <!-- =========================
+                             PRICE
+                        ========================== -->
+
+                        <div class="price-box">
+
+                            <div class="price-header">
+
+                                <div>
+
+                                    <div class="price-label">
+                                        Price
+                                    </div>
+
+                                    <div class="price">
+
+                                        ₹<%= home.price %>
+
+                                        <span class="price-night">
+                                            / night
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="available-badge">
+                                    ✓ Available
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =========================
+                             DESCRIPTION
+                        ========================== -->
+
+                        <div class="about-section">
+
+                            <div class="section-heading">
+
+                                <div class="heading-icon">
+                                    ✦
+                                </div>
+
+                                About this place
+
+                            </div>
+
+
+                            <% if (home.description) { %>
+
+                                <p class="description">
+                                    <%= home.description %>
+                                </p>
+
+                            <% } else { %>
+
+                                <p class="description">
+                                    No description has been provided for this property.
+                                </p>
+
+                            <% } %>
+
+                        </div>
+
+
+
+                        <!-- =========================
+                             INFO CARDS
+                        ========================== -->
+
+                        <div class="info-grid">
+
+
+                            <div class="info-card location">
+
+                                <div class="info-label">
+                                    Location
+                                </div>
+
+                                <div class="info-value">
+                                    <%= home.location %>
+                                </div>
+
+                            </div>
+
+
+                            <div class="info-card rating">
+
+                                <div class="info-label">
+                                    Rating
+                                </div>
+
+                                <div class="info-value">
+                                    ★ <%= home.rating %> / 5
+                                </div>
+
+                            </div>
+
+
+                            <div class="info-card stay">
+
+                                <div class="info-label">
+                                    Stay
+                                </div>
+
+                                <div class="info-value">
+                                    Comfortable
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- =========================
+                             ACTIONS
+                        ========================== -->
+
+                        <div class="actions">
+
+
+                            <!-- Favourite -->
+
+                            <form
+                                action="/favourites"
+                                method="POST"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="id"
+                                    value="<%= home._id %>"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="favourite-button"
+                                >
+
+                                    <span class="heart">
+                                        ♡
+                                    </span>
+
+                                    Add to Favourites
+
+                                </button>
+
+                            </form>
+
+
+
+                            <!-- Book -->
+
+                            <a
+                                href="/book/<%= home._id %>"
+                                class="book-button"
+                            >
+
+                                <span>
+                                    Book Now
+                                </span>
+
+                                <span class="book-arrow">
+                                    →
+                                </span>
+
+                            </a>
+
+
+                        </div>
+
+
+                        <div class="booking-note">
+                            Choose your dates and guests after clicking Book Now.
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================
+                 HOUSE RULES
+            ========================== -->
+
+            <% if (home.houseRules) { %>
+
+                <section class="rules-section">
+
+
+                    <!-- Rules header -->
+
+                    <div class="rules-header">
+
+
+                        <div class="rules-title-wrapper">
+
+
+                            <div class="rules-icon">
+                                📄
+                            </div>
+
+
+                            <div>
+
+                                <h2 class="rules-title">
+                                    House Rules
+                                </h2>
+
+                                <p class="rules-subtitle">
+                                    Please review the rules before booking your stay.
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- Download -->
+
+                        <a
+                            href="/uploads/<%= home.houseRules %>"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download
+                            class="download-button"
+                        >
+
+                            <span>
+                                ↓
+                            </span>
+
+                            Download PDF
+
+                        </a>
+
+
+                    </div>
+
+
+
+                    <!-- PDF -->
+
+                    <div class="pdf-container">
+
+                        <iframe
+                            src="/uploads/<%= home.houseRules %>#toolbar=1&view=FitH"
+                            title="House Rules PDF"
+                            class="pdf-frame"
+                        >
+                        </iframe>
+
+                    </div>
+
+
+                </section>
+
+
+            <% } else { %>
+
+
+                <!-- =========================
+                     NO RULES
+                ========================== -->
+
+                <section class="no-rules">
+
+
+                    <div class="no-rules-content">
+
+
+                        <div class="no-rules-icon">
+                            📄
+                        </div>
+
+
+                        <div>
+
+                            <h2 class="no-rules-title">
+                                House Rules
+                            </h2>
+
+                            <p class="no-rules-text">
+                                No house rules have been uploaded for this property.
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+            <% } %>
+
+
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

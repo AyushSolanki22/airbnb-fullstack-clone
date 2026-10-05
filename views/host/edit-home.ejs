@@ -1,0 +1,670 @@
+<%- include('../partials/head') %>
+
+<style>
+  .publish-property-btn {
+    width: 100% !important;
+    min-height: 60px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+
+    padding: 16px 24px !important;
+
+    background: linear-gradient(
+      135deg,
+      #ef4444,
+      #dc2626,
+      #be123c
+    ) !important;
+
+    color: #ffffff !important;
+
+    border: none !important;
+    border-radius: 14px !important;
+
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    font-family: inherit !important;
+
+    cursor: pointer !important;
+
+    box-shadow:
+      0 8px 20px rgba(220, 38, 38, 0.25) !important;
+
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      background 0.2s ease !important;
+  }
+
+  .publish-property-btn:hover {
+    background: linear-gradient(
+      135deg,
+      #dc2626,
+      #b91c1c,
+      #9f1239
+    ) !important;
+
+    color: #ffffff !important;
+
+    transform: translateY(-2px) !important;
+
+    box-shadow:
+      0 12px 25px rgba(220, 38, 38, 0.35) !important;
+  }
+
+  .publish-property-btn:active {
+    transform: translateY(0) !important;
+  }
+
+  .publish-property-btn span {
+    color: #ffffff !important;
+  }
+</style>
+
+
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+  <%- include('../partials/header') %>
+
+  <!-- Page Background -->
+  <main class="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 py-8 sm:py-12">
+
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+
+      <!-- ================= HEADER ================= -->
+      <div class="mb-8">
+
+        <div class="mb-3 flex items-center gap-2">
+          <span class="rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-600">
+            🏠 Host Dashboard
+          </span>
+        </div>
+
+        <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          <%= editing ? "Edit Your Property" : "Register Your Property" %>
+        </h1>
+
+        <p class="mt-2 max-w-2xl text-slate-600">
+          <%= editing
+            ? "Update your property information and keep your listing accurate."
+            : "Add your property details and make your place ready for guests."
+          %>
+        </p>
+
+      </div>
+
+
+      <!-- ================= MAIN FORM ================= -->
+
+      <form
+        action="<%= editing ? `/host/edit-home/${home._id}` : '/host/add-home' %>"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-6"
+      >
+
+        <!-- ================= PROPERTY INFORMATION ================= -->
+
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+          <!-- Section Header -->
+          <div class="border-b border-slate-200 bg-gradient-to-r from-red-50 to-orange-50 px-6 py-5">
+
+            <div class="flex items-center gap-4">
+
+              <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-2xl">
+                🏠
+              </div>
+
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">
+                  Property Information
+                </h2>
+
+                <p class="text-sm text-slate-600">
+                  Tell guests about your property.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="space-y-6 p-6">
+
+            <!-- Name + Location -->
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+
+              <!-- Property Name -->
+              <div>
+                <label
+                  for="houseName"
+                  class="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                  Property Name
+                </label>
+
+                <input
+                  id="houseName"
+                  type="text"
+                  name="houseName"
+                  placeholder="e.g. Mannat, Cozy Delhi Apartment"
+                  value="<%= editing ? home.name : '' %>"
+                  required
+                  class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                >
+              </div>
+
+
+              <!-- Location -->
+              <div>
+                <label
+                  for="houseLocation"
+                  class="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                  📍 Location
+                </label>
+
+                <input
+                  id="houseLocation"
+                  type="text"
+                  name="houseLocation"
+                  placeholder="e.g. Delhi, India"
+                  value="<%= editing ? home.location : '' %>"
+                  required
+                  class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                >
+              </div>
+
+            </div>
+
+
+            <!-- Rating -->
+            <div class="max-w-md">
+
+              <label
+                for="houseRating"
+                class="mb-2 block text-sm font-semibold text-slate-700"
+              >
+                ⭐ Property Rating
+              </label>
+
+              <input
+                id="houseRating"
+                type="number"
+                name="houseRating"
+                min="0"
+                max="5"
+                step="0.1"
+                placeholder="e.g. 4.8"
+                value="<%= editing ? home.rating : '' %>"
+                required
+                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+              >
+
+              <p class="mt-2 text-xs text-slate-500">
+                Rating should be between 0 and 5.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ================= PRICING & GUESTS ================= -->
+
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+          <!-- Section Header -->
+          <div class="border-b border-slate-200 bg-gradient-to-r from-emerald-50 to-teal-50 px-6 py-5">
+
+            <div class="flex items-center gap-4">
+
+              <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-2xl">
+                💰
+              </div>
+
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">
+                  Pricing & Guests
+                </h2>
+
+                <p class="text-sm text-slate-600">
+                  Set your nightly price and guest limits.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="p-6">
+
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+
+              <!-- Price -->
+              <div>
+
+                <label
+                  for="housePrice"
+                  class="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                  Price / Night
+                </label>
+
+                <div class="relative">
+
+                  <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-emerald-600">
+                    ₹
+                  </span>
+
+                  <input
+                    id="housePrice"
+                    type="number"
+                    name="housePrice"
+                    min="1"
+                    step="1"
+                    placeholder="1000"
+                    value="<%= editing ? home.price : '' %>"
+                    required
+                    class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-4 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                  >
+
+                </div>
+
+                <p class="mt-2 text-xs text-slate-500">
+                  Base price for one night.
+                </p>
+
+              </div>
+
+
+              <!-- Maximum Guests -->
+              <div>
+
+                <label
+                  for="maxGuests"
+                  class="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                  👥 Maximum Guests
+                </label>
+
+                <input
+                  id="maxGuests"
+                  type="number"
+                  name="maxGuests"
+                  min="1"
+                  step="1"
+                  placeholder="4"
+                  value="<%= editing ? home.maxGuests : '' %>"
+                  required
+                  class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                >
+
+                <p class="mt-2 text-xs text-slate-500">
+                  Maximum number of guests allowed.
+                </p>
+
+              </div>
+
+
+              <!-- Extra Guest Fee -->
+              <div>
+
+                <label
+                  for="extraGuestFee"
+                  class="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                  ➕ Extra Guest Fee / Night
+                </label>
+
+                <div class="relative">
+
+                  <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-emerald-600">
+                    ₹
+                  </span>
+
+                  <input
+                    id="extraGuestFee"
+                    type="number"
+                    name="extraGuestFee"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                    value="<%= editing ? home.extraGuestFee : '0' %>"
+                    required
+                    class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-4 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                  >
+
+                </div>
+
+                <p class="mt-2 text-xs text-slate-500">
+                  Charged for every guest after the first guest.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <!-- Pricing explanation -->
+            <div class="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+
+              <div class="flex gap-3">
+
+                <span class="text-xl">
+                  💡
+                </span>
+
+                <div>
+
+                  <p class="font-semibold text-emerald-800">
+                    How pricing works
+                  </p>
+
+                  <p class="mt-1 text-sm text-emerald-700">
+                    Your base price is charged for each night.
+                    Additional guests can have an extra nightly charge.
+                    The final booking price will be calculated automatically.
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ================= DESCRIPTION ================= -->
+
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+          <div class="border-b border-slate-200 bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-5">
+
+            <div class="flex items-center gap-4">
+
+              <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-2xl">
+                ✨
+              </div>
+
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">
+                  About Your Property
+                </h2>
+
+                <p class="text-sm text-slate-600">
+                  Help guests understand what makes your place special.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="p-6">
+
+            <label
+              for="description"
+              class="mb-2 block text-sm font-semibold text-slate-700"
+            >
+              Property Description
+            </label>
+
+            <textarea
+              id="description"
+              name="description"
+              rows="6"
+              placeholder="Describe your property, rooms, facilities, nearby attractions, atmosphere, etc."
+              class="w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            ><%= editing ? home.description : '' %></textarea>
+
+            <p class="mt-2 text-xs text-slate-500">
+              A clear and attractive description helps guests understand your property better.
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <!-- ================= PHOTO UPLOAD ================= -->
+
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+          <div class="border-b border-slate-200 bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-5">
+
+            <div class="flex items-center gap-4">
+
+              <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-2xl">
+                📸
+              </div>
+
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">
+                  Property Photo
+                </h2>
+
+                <p class="text-sm text-slate-600">
+                  Add a beautiful photo that represents your property.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="p-6">
+
+            <label
+              for="photo"
+              class="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-purple-300 bg-purple-50 px-6 py-10 text-center transition hover:border-purple-500 hover:bg-purple-100"
+            >
+
+              <div class="mb-3 text-4xl">
+                📷
+              </div>
+
+              <p class="font-semibold text-purple-900">
+                <%= editing ? "Upload a new property photo" : "Upload your property photo" %>
+              </p>
+
+              <p class="mt-1 text-sm text-purple-700">
+                JPG, JPEG, PNG or WEBP
+              </p>
+
+              <span class="mt-4 rounded-lg bg-purple-600 px-5 py-2 text-sm font-semibold text-white shadow-sm">
+                Choose Photo
+              </span>
+
+              <input
+                id="photo"
+                type="file"
+                name="photo"
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                class="hidden"
+                <%= editing ? '' : 'required' %>
+              >
+
+            </label>
+
+
+            <% if (editing && home.photo) { %>
+
+              <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+
+                <p class="mb-3 text-sm font-semibold text-slate-700">
+                  Current Photo
+                </p>
+
+                <img
+                  src="/uploads/<%= home.photo %>"
+                  alt="<%= home.name %>"
+                  class="h-40 w-full rounded-xl object-cover"
+                >
+
+              </div>
+
+            <% } %>
+
+          </div>
+
+        </section>
+
+
+        <!-- ================= HOUSE RULES ================= -->
+
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+          <div class="border-b border-slate-200 bg-gradient-to-r from-amber-50 to-yellow-50 px-6 py-5">
+
+            <div class="flex items-center gap-4">
+
+              <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-2xl">
+                📄
+              </div>
+
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">
+                  House Rules
+                </h2>
+
+                <p class="text-sm text-slate-600">
+                  Upload a PDF containing rules and guidelines for guests.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="p-6">
+
+            <label
+              for="houseRules"
+              class="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 px-6 py-10 text-center transition hover:border-amber-500 hover:bg-amber-100"
+            >
+
+              <div class="mb-3 text-4xl">
+                📑
+              </div>
+
+              <p class="font-semibold text-amber-900">
+                <%= editing ? "Upload updated house rules" : "Upload house rules PDF" %>
+              </p>
+
+              <p class="mt-1 text-sm text-amber-700">
+                PDF files only
+              </p>
+
+              <span class="mt-4 rounded-lg bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm">
+                Choose PDF
+              </span>
+
+              <input
+                id="houseRules"
+                type="file"
+                name="houseRules"
+                accept=".pdf,application/pdf"
+                class="hidden"
+              >
+
+            </label>
+
+
+            <% if (editing && home.houseRules) { %>
+
+              <div class="mt-5 flex flex-col gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+
+                <div class="flex items-center gap-3">
+
+                  <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
+                    📄
+                  </div>
+
+                  <div>
+                    <p class="text-sm font-semibold text-slate-800">
+                      Current house rules
+                    </p>
+
+                    <p class="text-xs text-slate-500">
+                      PDF document
+                    </p>
+                  </div>
+
+                </div>
+
+                <a
+                  href="/uploads/<%= home.houseRules %>"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
+                >
+                  View PDF
+                </a>
+
+              </div>
+
+            <% } %>
+
+          </div>
+
+        </section>
+
+
+        <!-- ================= SUBMIT ================= -->
+
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+
+          <div class="mt-8 rounded-2xl border border-red-100 bg-gradient-to-r from-white via-red-50 to-orange-50 p-6 shadow-lg">
+
+  <div class="flex flex-col gap-5">
+
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900">
+        Ready to publish your property?
+      </h2>
+
+      <p class="mt-2 text-gray-600">
+        Make sure all the information is correct before continuing.
+      </p>
+    </div>
+
+    <button
+      type="submit"
+      class="publish-property-btn"
+    >
+      <span>🚀</span>
+      <span>
+        <%= editing ? "Update Property" : "Publish Property" %>
+      </span>
+    </button>
+
+  </div>
+
+</div>
+        </section>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</body>
+</html>
